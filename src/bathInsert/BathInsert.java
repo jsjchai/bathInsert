@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 import model.DB;
 import model.User;
@@ -15,11 +17,11 @@ public class BathInsert {
     
     private static List<User> getData(){
         List<User> userList=new ArrayList<>();
-        for(int i=1;i<200000;i++){
+        for(int i=1;i<900000;i++){
             User user=new User();
             user.setId(i);
-            user.setUsername("test"+i);
-            user.setEmail("test"+i+"@test.com");
+            user.setUsername(UUID.randomUUID().toString());
+            user.setEmail("test13"+ i +"@test.com");
             userList.add(user);
         }
         return userList;
@@ -120,8 +122,9 @@ public class BathInsert {
             Statement stat=DB.getStatement(conn);
             StringBuffer buf=new StringBuffer();
             buf.append("insert into user values");
+            String str = null;
             for(User u:userList){
-                buf.append("(").append(u.getId()).append(",'").append(u.getUsername()).append("','").append(u.getEmail()).append("'),");
+                buf.append("(").append(str).append(",'").append(u.getUsername()).append("','").append(u.getEmail()).append("'),");
             }
             stat.executeUpdate(buf.substring(0, buf.length()-1));
             conn.commit();
